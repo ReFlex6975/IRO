@@ -1,0 +1,26 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Оценка работы: {{ submission.title }}</h1>
+
+        {% if criteria %}
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for criterion in criteria %}
+                    <div class="form-group">
+                        <label for="points_{{ criterion.id }}">{{ criterion.name }} (Макс. баллы: {{ criterion.max_points }})</label>
+                        <input type="number" class="form-control" name="points_{{ criterion.id }}" max="{{ criterion.max_points }}" required>
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success">Оценить3</button>
+            </form>
+        {% else %}
+            <p>Нет критериев для оценки.</p>
+        {% endif %}
+
+        <a href="{% url 'submission_detail' submission.id %}" class="btn btn-secondary mt-3">Назад</a>
+    </div>
+{% endblock %}

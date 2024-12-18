@@ -1,0 +1,52 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+<h1>Редактировать конкурс</h1>
+<form method="post">
+    {% csrf_token %}
+
+    <p>
+        <label for="id_title">Название:</label>
+        <input type="text" name="title" value="{{ form.title.value }}" class="form-control" maxlength="255" required="" id="id_title">
+    </p>
+
+    <p>
+        <label for="id_start_date">Дата начала:</label>
+        <input type="date" name="start_date" value="{{ form.start_date.value|date:"Y-m-d" }}" class="form-control" required="" id="id_start_date">
+    </p>
+
+    <p>
+        <label for="id_end_date">Дата окончания:</label>
+        <input type="date" name="end_date" value="{{ form.end_date.value|date:"Y-m-d" }}" class="form-control" required="" id="id_end_date">
+    </p>
+
+    <p>
+        <label for="id_description">Описание:</label>
+        <textarea name="description" cols="40" rows="5" class="form-control" required="" id="id_description">{{ form.description.value }}</textarea>
+    </p>
+
+    <p>
+        <label for="id_status">Статус:</label>
+        <select name="status" class="form-select" id="id_status">
+            <option value="1" {% if form.status.value == 1 %}selected{% endif %}>Скоро начнется</option>
+            <option value="2" {% if form.status.value == 2 %}selected{% endif %}>Идет конкурс</option>
+            <option value="3" {% if form.status.value == 3 %}selected{% endif %}>Архив</option>
+        </select>
+    </p>
+
+    <p>
+        <label for="id_moderators">Модераторы:</label>
+        <select name="moderators" class="form-control" id="id_moderators" multiple="">
+            {% for user in form.moderators.field.queryset %}
+                <option value="{{ user.id }}" {% if user.id in form.moderators.value %}selected{% endif %}>
+                    {{ user.email }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+
+{% endblock %}

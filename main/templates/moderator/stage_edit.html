@@ -1,0 +1,15 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Редактирование этапа: {{ stage.title }}{% endblock %}
+
+{% block content %}
+    <h1>Редактирование этапа: {{ stage.title }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+
+    <a href="{% url 'contest_detail' stage.contest.id %}" class="btn btn-secondary mt-3">Назад к конкурсу</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+<h1>Работы для оценки: {{ stage.title }}</h1>
+<ul>
+    {% for submission in submissions %}
+        <li>
+            {{ submission.title }} - {{ submission.user.username }}
+            <a href="{% url 'submission_detail' submission.id %}" class="btn btn-primary btn-sm">Оценить1</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

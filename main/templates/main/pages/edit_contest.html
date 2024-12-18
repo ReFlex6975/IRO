@@ -1,0 +1,46 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Редактировать конкурс{% endblock %}
+
+{% block content %}
+<h2>Редактировать конкурс: {{ contest.title }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="id_title">Название</label>
+        {{ contest_form.title }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_start_date">Дата начала</label>
+        {{ contest_form.start_date }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_end_date">Дата окончания</label>
+        {{ contest_form.end_date }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_description">Описание</label>
+        {{ contest_form.description }}
+    </div>
+
+    <div class="form-group">
+        <label for="id_status">Статус</label>
+        {{ contest_form.status }}
+    </div>
+
+    <!-- Формы для этапов -->
+    <h3>Этапы конкурса</h3>
+    {{ stage_form.as_p }}
+
+    <!-- Формы для критериев -->
+    <h3>Критерии оценки для этапа</h3>
+    {{ criterion_form.as_p }}
+
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+</form>
+{% endblock %}

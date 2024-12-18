@@ -1,0 +1,16 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Редактировать{% endblock %}
+
+{% block content %}
+  <h2>Редактирование профиля</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Форматируем форму как абзацы -->
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+  </form>
+{% endblock %}
+
+{% block extra_head %}
+    {{ form.media }}  <!-- Подключаем медиа-ресурсы для формы (CSS и JS) -->
+{% endblock %}

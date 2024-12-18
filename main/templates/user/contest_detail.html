@@ -1,0 +1,58 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Детали конкурса: {{ contest.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">{{ contest.title }}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Описание:</strong> {{ contest.description }}</p>
+            <p><strong>Статус:</strong> <span class="badge bg-info">{{ contest.get_status_display }}</span></p>
+            <p><strong>Дата начала:</strong> {{ contest.start_date|date:"d F Y" }}</p>
+            <p><strong>Дата окончания:</strong> {{ contest.end_date|date:"d F Y" }}</p>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Модераторы</h3>
+    {% if contest.moderators.all %}
+        <ul class="list-group mb-4">
+            {% for moderator in contest.moderators.all %}
+                <li class="list-group-item">{{ moderator.email }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning">Модераторов нет.</div>
+    {% endif %}
+
+    <h3 class="mt-4">Этапы</h3>
+    {% if contest.stages.all %}
+        <ul class="list-group">
+            {% for stage in contest.stages.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ stage.title }}</strong><br>
+                        {{ stage.start_date|date:"d F Y" }} — {{ stage.end_date|date:"d F Y" }}
+                    </div>
+                    <div class="btn-group">
+                        <a href="{% url 'stage_edit' stage.id %}" class="btn btn-secondary btn-sm mr-3">Редактировать</a>
+                        <a href="{% url 'stage_detail' stage.id %}" class="btn btn-info btn-sm">Детали</a>
+                        <form action="{% url 'stage_delete' stage.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning mt-3">Этапов нет.</div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'create_stage' contest.id %}" class="btn btn-success">Добавить этап</a>
+        <a href="{% url 'award_create_with_contest' contest.id %}" class="btn btn-success">Добавить награду</a>
+    </div>
+</div>
+{% endblock %}

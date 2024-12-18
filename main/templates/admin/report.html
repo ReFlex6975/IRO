@@ -1,0 +1,24 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Отчет по конкурсу: {{ contest.title }}</h2>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Название работы</th>
+          <th>Общее количество баллов</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in report %}
+        <tr>
+          <td>{{ item.submission.title }}</td>
+          <td>{{ item.total_points }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

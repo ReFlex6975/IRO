@@ -1,0 +1,17 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Детали работы: {{ submission.title }}</h1>
+        <p>Работа подана пользователем: {{ submission.user.email }}</p>
+        <p>Этап конкурса: {{ submission.stage.title }}</p>
+        <p>Дата подачи: {{ submission.submission_date }}</p>
+
+        <!-- Если есть файлы, выводим ссылку на файл -->
+        {% if submission.file %}
+            <p><a href="{{ submission.file.url }}" target="_blank">Скачать файл</a></p>
+        {% endif %}
+
+        <a href="{% url 'evaluate_submission' submission.id %}" class="btn btn-primary">Оценить работу2</a>
+    </div>
+{% endblock %}

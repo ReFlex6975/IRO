@@ -1,0 +1,12 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+<h1>Оценка работ</h1>
+<ul>
+    {% for contest in contests %}
+        <li>
+            <a href="{% url 'expert_stages' contest.id %}">{{ contest.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

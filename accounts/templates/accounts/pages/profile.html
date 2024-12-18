@@ -1,0 +1,68 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+    <h1>Кабинет</h1>
+    <a href="{% url 'profile_edit' %}">Редактировать профиль</a>
+
+    <div class="profile-info mt-4">
+        <table class="table">
+            {% if user.first_name %}
+            <tr>
+                <th>Имя:</th>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            {% endif %}
+            {% if user.last_name %}
+            <tr>
+                <th>Фамилия:</th>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            {% endif %}
+            {% if user.middle_name %}
+            <tr>
+                <th>Отчество:</th>
+                <td>{{ user.middle_name }}</td>
+            </tr>
+            {% endif %}
+            {% if user.date_of_birth %}
+            <tr>
+                <th>Дата рождения:</th>
+                <td>{{ user.date_of_birth }}</td>
+            </tr>
+            {% endif %}
+            {% if user.region %}
+            <tr>
+                <th>Регион:</th>
+                <td>{{ user.get_region_display }}</td>
+            </tr>
+            {% endif %}
+            {% if user.school %}
+            <tr>
+                <th>Учебное заведение:</th>
+                <td>{{ user.school }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Email:</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            {% if user.bio %}
+            <tr>
+                <th>О себе:</th>
+                <td>{{ user.bio }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Пароль:</th>
+                <td>
+                    <button type="button" onclick="window.location.href=''">
+                        Сбросить пароль
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+{% endblock %}

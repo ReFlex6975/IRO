@@ -1,0 +1,12 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+<h1>Этапы конкурса: {{ contest.title }}</h1>
+<ul>
+    {% for stage in stages %}
+        <li>
+            <a href="{% url 'expert_submissions' stage.id %}">{{ stage.title }} ({{ stage.start_date }} - {{ stage.end_date }})</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

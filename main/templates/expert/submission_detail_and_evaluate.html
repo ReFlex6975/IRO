@@ -1,0 +1,35 @@
+{% extends 'main/base/index.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Детали и оценка работы: {{ submission.title }}</h1>
+        <p>Работа подана пользователем: {{ submission.user.email }}</p>
+        <p>Этап конкурса: {{ submission.stage.title }}</p>
+        <p>Дата подачи: {{ submission.submission_date }}</p>
+
+        <!-- Если есть файлы, выводим ссылку на файл -->
+        {% if submission.file %}
+            <p><a href="{{ submission.file.url }}" target="_blank" class="btn btn-primary">Скачать файл</a></p>
+        {% endif %}
+
+        <hr>
+
+        <!-- Форма для оценки -->
+        <h2>Оценка работы</h2>
+        {% if criteria %}
+            <form method="POST">
+                {% csrf_token %}
+                {% for criterion in criteria %}
+                    <div class="form-group">
+                        <label for="points_{{ criterion.id }}">{{ criterion.name }} (Макс. баллы: {{ criterion.max_points }})</label>
+                        <input type="number" class="form-control" name="points_{{ criterion.id }}" max="{{ criterion.max_points }}" required>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success mt-3">Оценить</button>
+            </form>
+        {% else %}
+            <p>Нет критериев для оценки.</p>
+        {% endif %}
+        <a href="{% url 'expert_submissions' submission.stage.id %}" class="btn btn-secondary mt-3">Назад</a>
+    </div>
+{% endblock %}

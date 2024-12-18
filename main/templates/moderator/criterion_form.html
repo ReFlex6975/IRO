@@ -1,0 +1,15 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Добавить критерий для этапа: {{ stage.title }}{% endblock %}
+
+{% block content %}
+    <h1>Добавить критерий для этапа: {{ stage.title }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить критерий</button>
+    </form>
+
+    <a href="{% url 'stage_detail' stage.id %}" class="btn btn-secondary mt-3">Назад к этапу</a>
+{% endblock %}

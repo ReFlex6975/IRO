@@ -1,0 +1,4 @@
+<!-- Кнопка редактирования, видимая только для модераторов -->
+                {% if user in contest.moderators.all %}
+                <a href="{% url 'edit_contest' contest.id %}" class="btn btn-primary">Редактировать</a>
+                {% endif %}

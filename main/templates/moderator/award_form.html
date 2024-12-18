@@ -1,0 +1,12 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Добавить этап для конкурса: {{ contest.title }}{% endblock %}
+
+{% block content %}
+    <h1>Добавить награду</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить</button>
+    </form>
+{% endblock %}

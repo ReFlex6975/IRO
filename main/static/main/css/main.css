@@ -1,0 +1,13 @@
+body {
+    font-family: 'Merriweather', serif;
+    background-color: white;
+}
+  .form-control {
+  background-color: #E5EEF0;
+  color: #8C8C8C;
+      height: 66px;
+      border-radius: 0;
+}
+  .delete-border-radius{
+      border-radius: 0;
+  }

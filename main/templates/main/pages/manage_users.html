@@ -1,0 +1,55 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Управление пользователями{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Управление пользователями</h2>
+
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Поиск по имени, фамилии, отчеству или email" value="{{ request.GET.q }}" style="border-radius: 0">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary" style="height: 100%; border-radius: 0; background-color: #117A90; border: 0;" >Поиск</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Email</th>
+                    <th>Текущая роль</th>
+                    <th>Изменить роль</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.middle_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{% if user.role %}{{ user.role }}{% else %}Нет роли{% endif %}</td>
+                    <td>
+                        <form method="post" class="d-flex">
+                        {% csrf_token %}
+                        {{ form.user_id.as_hidden }}
+                        {{ form.role }}
+                        <div class="d-flex">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary ml-auto" style="border-radius: 0;">Изменить</button>
+                        </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

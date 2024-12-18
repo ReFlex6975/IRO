@@ -1,0 +1,55 @@
+{% extends 'main/base/index.html' %}
+
+{% block title %}Детали этапа: {{ stage.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ stage.title }}</h1>
+    <p><strong>Дата начала:</strong> {{ stage.start_date|date:"d F Y" }}</p>
+    <p><strong>Дата окончания:</strong> {{ stage.end_date|date:"d F Y" }}</p>
+
+    <h3>Эксперты:</h3>
+    <ul>
+        {% for expert in stage.experts.all %}
+            <li>{{ expert.email }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Критерии для этапа:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Название критерия</th>
+                <th>Макс. баллы</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for criterion in criteria %}
+                <tr>
+                    <td>{{ criterion.name }}</td>
+                    <td>{{ criterion.max_points }}</td>
+                    <td>
+                        <!-- Форма для удаления критерия -->
+                        <form method="POST" action="{% url 'delete_criterion' criterion.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Добавить новый критерий:</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Добавить</button>
+    </form>
+
+
+
+        <a href="{% url 'submit_work' stage.id %}" class="btn btn-success mt-3">Подать работу</a>
+
+        <a href="{% url 'contest_detail' stage.contest.id %}" class="btn btn-secondary mt-3">Назад к конкурсу</a>
+{% endblock %}
