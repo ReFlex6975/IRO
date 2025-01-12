@@ -5,25 +5,90 @@
 
 {% block content %}
     <h1>Конкурсы</h1>
-    <h3>rRaCLBli</h3>
-{% comment %}
-    <div class="d-flex">
-        <p>Идет конкурс</p>
-        <p>Скоро начнется</p>
-        <p>Архив</p>
+    
+
+    <div class="d-flex mb-3">
+        {% for status, name in statuses %}
+            <a href="?q={{ request.GET.q|default:'' }}&status={% if request.GET.status == status|stringformat:'s' %}{% else %}{{ status }}{% endif %}"
+               class="btn me-2 {% if request.GET.status == status|stringformat:'s' %}btn-primary{% endif %} custom-btn"
+               style="border-radius: 0;">
+                {{ name }}
+            </a>
+        {% endfor %}
     </div>
-{% endcomment %}
-<form method="get" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Поиск по названию"
-               value="{{ query }}" style="border-radius: 0;">
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary" style="height: 100%; border-radius: 0; background-color: #117A90; border: 0;">
-                Поиск
-            </button>
+
+    <style>
+        .custom-btn {
+            background-color: transparent;
+            color: #117A90;
+            border: 2px solid #117A90;
+            border-radius: 0;
+            transition: all 0.3s ease; /* Плавный переход */
+            outline: none; /* Убирает обводку */
+        }
+        
+        .custom-btn:hover {
+            background-color: #117A90;
+            color: #fff; /* Текст становится белым при наведении */
+            border-color: #117A90; /* Цвет рамки при наведении */
+        }
+        
+        .custom-btn.btn-primary {
+            background-color: #117A90;
+            color: #fff;
+        }
+        
+        .custom-btn.btn-primary:hover {
+            background-color: #0E5E72; /* Более темный оттенок при наведении */
+        }
+        
+        /* Убираем синюю рамку при фокусе */
+        .custom-btn:focus {
+            outline: none;
+            box-shadow: none; /* Убирает синюю тень Bootstrap */
+            border-color: #117A90; /* Цвет рамки при фокусе */
+        }
+        
+        /* Убираем синюю рамку и фон при зажатии */
+        .custom-btn:active {
+            outline: none;
+            box-shadow: none;
+            background-color: transparent; /* Фон остается прозрачным при зажатии */
+            color: #117A90; /* Цвет текста */
+            border-color: #117A90; /* Цвет рамки при зажатии */
+        }
+        
+        /* Для кнопок в состоянии .btn-primary */
+        .custom-btn.btn-primary:active {
+            background-color: #0C5B6A; /* Более темный оттенок */
+            color: #fff;
+            border-color: #0C5B6A;
+            box-shadow: none; /* Убираем тень */
+        }
+        
+        /* Для всех остальных кнопок в состоянии :active */
+        .custom-btn:not(.btn-primary):active {
+            background-color: transparent;
+            color: #117A90;
+            border-color: #117A90;
+            box-shadow: none;
+        }
+    </style>
+
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Поиск по названию"
+                   value="{{ query }}" style="border-radius: 0;">
+            {% if request.GET.status %}
+            <input type="hidden" name="status" value="{{ request.GET.status }}">
+            {% endif %}
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary" style="height: 100%; border-radius: 0; background-color: #117A90; border: 0;">
+                    Поиск
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 {% comment %}
     <div class="d-flex">
         <p>2023</p>
@@ -65,7 +130,7 @@
 
                 <div style="height: 4px; background-color: #117A90;"></div>
 
-                {% if user.is_superuser or user in contest.moderators.all %}
+                {% if user.role == 'admin' or user in contest.moderators.all %}
     <div class="d-flex justify-content-between p-3">
         <a href="{% url 'contest_edit' contest.id %}" class="btn btn-primary btn-sm flex-grow-1 me-2" style="border-radius: 20px;">
             <i class="bi bi-pencil-square"></i> Редактировать

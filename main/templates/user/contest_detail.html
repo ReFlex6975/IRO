@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    {% if user.is_superuser or user in contest.moderators.all %}
+    {% if user.role == 'admin' or user in contest.moderators.all %}
     <h3 class="mt-4">Модераторы</h3>
     {% if contest.moderators.all %}
         <ul class="list-group mb-4">
@@ -39,7 +39,7 @@
                         {{ stage.start_date|date:"d F Y" }} — {{ stage.end_date|date:"d F Y" }}
                     </div>
             
-                    {% if user.is_superuser or user in contest.moderators.all %}
+                    {% if user.role == 'admin' or user in contest.moderators.all %}
                         <div class="btn-group ms-auto">
                             <a href="{% url 'stage_edit' stage.id %}" class="btn btn-secondary btn-sm mr-3">Редактировать</a>
                             <form action="{% url 'stage_delete' stage.id %}" method="POST" style="display:inline;">
@@ -56,7 +56,7 @@
         <div class="alert alert-warning mt-3">Этапов нет.</div>
     {% endif %}
 
-    {% if user.is_superuser or user in contest.moderators.all %}
+    {% if user.role == 'admin' or user in contest.moderators.all %}
     <div class="mt-4">
         <a href="{% url 'create_stage' contest.id %}" class="btn btn-success">Добавить этап</a>
         <a href="{% url 'award_create_with_contest' contest.id %}" class="btn btn-success">Добавить награду</a>

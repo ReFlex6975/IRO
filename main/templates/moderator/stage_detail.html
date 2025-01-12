@@ -7,14 +7,17 @@
     <p><strong>Дата начала:</strong> {{ stage.start_date|date:"d F Y" }}</p>
     <p><strong>Дата окончания:</strong> {{ stage.end_date|date:"d F Y" }}</p>
 
+    {% if user.role == 'admin' or user in stage.contest.moderators.all %}
     <h3>Эксперты:</h3>
     <ul>
         {% for expert in stage.experts.all %}
             <li>{{ expert.email }}</li>
         {% endfor %}
     </ul>
+    {% endif %}
 
-    {% if user.is_superuser or user in stage.contest.moderators.all %}
+
+    {% if user.role == 'admin' or user in stage.contest.moderators.all %}
     <h3>Критерии для этапа:</h3>
     <table class="table table-striped">
         <thead>
@@ -43,7 +46,7 @@
     </table>
     {% endif %}
     
-    {% if user.is_superuser or user in stage.contest.moderators.all %}
+    {% if user.role == 'admin' or user in stage.contest.moderators.all %}
         <h3>Добавить новый критерий:</h3>
         <form method="POST">
             {% csrf_token %}

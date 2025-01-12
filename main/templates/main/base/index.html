@@ -41,21 +41,26 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{% url 'home' %}">Главная</a>
                     </li>
+                    {% if user.role == 'admin' %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="" id="contestDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Конкурсы
                         </a>
+                        
                         <ul class="dropdown-menu" aria-labelledby="contestDropdown">
                             <li><a class="dropdown-item" href="{% url 'contest_create' %}">Создать конкурс</a></li>
                             <li><a class="dropdown-item" href="{% url 'expert_contests' %}">Оценка работы</a></li>
-
+                            
                             {% comment %}
                             <li><a class="dropdown-item" href="">4</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="">5</a></li>
                             {% endcomment %}
                         </ul>
+                        
                     </li>
+                    {% endif %}
+
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{% url 'manage_users' %}">Управление пользователями</a>
                     </li>

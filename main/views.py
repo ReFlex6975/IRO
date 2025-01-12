@@ -44,12 +44,28 @@ def generate_report(request, contest_id):
 
 def home_view(request):
     query = request.GET.get('q', '')  # Получаем значение параметра поиска
+    status = request.GET.get('status')  # Получаем выбранный статус
+
     contests = Contest.objects.all().order_by('-id')  # Сортировка по убыванию
 
-    if query:  # Если запрос не пустой, фильтруем конкурсы
+    if query:  # Если есть запрос поиска, фильтруем по названию
         contests = contests.filter(title__icontains=query)
 
-    return render(request, 'main/pages/home.html', {'contests': contests, 'query': query})
+    if status:  # Если выбран статус, фильтруем по нему
+        contests = contests.filter(status=status)
+
+    # Передаем список статусов в шаблон
+    statuses = [
+        (2, 'Идет конкурс'),
+        (1, 'Скоро начнется'),
+        (3, 'Архив'),
+    ]
+
+    return render(request, 'main/pages/home.html', {
+        'contests': contests,
+        'query': query,
+        'statuses': statuses,
+    })
 
 
 def manage_users_view(request):
