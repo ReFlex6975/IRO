@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h1 class="mb-4">Добавить этап для конкурса: {{ contest.title }}</h1>
 
-    <div class="card p-4 shadow-sm">
+    
         <form method="POST">
             {% csrf_token %}
             <div class="mb-3">
@@ -14,7 +14,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Сохранить этап</button>
         </form>
-    </div>
+   
 
     <div class="mt-3">
         <a href="{% url 'contest_detail' contest.id %}" class="btn btn-secondary">Назад к конкурсу</a>

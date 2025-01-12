@@ -43,8 +43,13 @@ def generate_report(request, contest_id):
 
 
 def home_view(request):
-    contests = Contest.objects.all()
-    return render(request, 'main/pages/home.html', {'contests': contests})
+    query = request.GET.get('q', '')  # Получаем значение параметра поиска
+    contests = Contest.objects.all().order_by('-id')  # Сортировка по убыванию
+
+    if query:  # Если запрос не пустой, фильтруем конкурсы
+        contests = contests.filter(title__icontains=query)
+
+    return render(request, 'main/pages/home.html', {'contests': contests, 'query': query})
 
 
 def manage_users_view(request):
@@ -155,7 +160,6 @@ def delete_stage(request, stage_id):
 def stage_detail(request, id):
     # Получаем этап по его ID
     stage = get_object_or_404(Stage, id=id)
-
     # Получаем все критерии для этого этапа
     criteria = Criterion.objects.filter(stage=stage)
 

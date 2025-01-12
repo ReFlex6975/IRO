@@ -27,12 +27,8 @@ class Contest(models.Model):
 
     def __str__(self):
         return self.title
-
-    def clean(self):
-        if self.start_date > self.end_date:
-            raise ValidationError("Дата начала не может быть позже даты окончания.")
-
-
+    
+    
 # Этап конкурса
 class Stage(models.Model):
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="stages")

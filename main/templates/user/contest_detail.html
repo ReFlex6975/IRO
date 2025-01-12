@@ -15,6 +15,7 @@
         </div>
     </div>
 
+    {% if user.is_superuser or user in contest.moderators.all %}
     <h3 class="mt-4">Модераторы</h3>
     {% if contest.moderators.all %}
         <ul class="list-group mb-4">
@@ -25,34 +26,41 @@
     {% else %}
         <div class="alert alert-warning">Модераторов нет.</div>
     {% endif %}
+    {% endif %}
 
     <h3 class="mt-4">Этапы</h3>
     {% if contest.stages.all %}
         <ul class="list-group">
             {% for stage in contest.stages.all %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{% url 'stage_detail' stage.id %}" style="text-decoration: none; color: inherit; display: flex; width: 100%;">
                     <div>
                         <strong>{{ stage.title }}</strong><br>
                         {{ stage.start_date|date:"d F Y" }} — {{ stage.end_date|date:"d F Y" }}
                     </div>
-                    <div class="btn-group">
-                        <a href="{% url 'stage_edit' stage.id %}" class="btn btn-secondary btn-sm mr-3">Редактировать</a>
-                        <a href="{% url 'stage_detail' stage.id %}" class="btn btn-info btn-sm">Детали</a>
-                        <form action="{% url 'stage_delete' stage.id %}" method="POST" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-                        </form>
-                    </div>
-                </li>
+            
+                    {% if user.is_superuser or user in contest.moderators.all %}
+                        <div class="btn-group ms-auto">
+                            <a href="{% url 'stage_edit' stage.id %}" class="btn btn-secondary btn-sm mr-3">Редактировать</a>
+                            <form action="{% url 'stage_delete' stage.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </a>
+            </li>
             {% endfor %}
         </ul>
     {% else %}
         <div class="alert alert-warning mt-3">Этапов нет.</div>
     {% endif %}
 
+    {% if user.is_superuser or user in contest.moderators.all %}
     <div class="mt-4">
         <a href="{% url 'create_stage' contest.id %}" class="btn btn-success">Добавить этап</a>
         <a href="{% url 'award_create_with_contest' contest.id %}" class="btn btn-success">Добавить награду</a>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'main/base/index.html' %}
 
+{% block title %}Редактировать конкурс{% endblock %}
+
 {% block content %}
 <h1>Редактировать конкурс</h1>
 <form method="post">
@@ -27,7 +29,7 @@
 
     <p>
         <label for="id_status">Статус:</label>
-        <select name="status" class="form-select" id="id_status">
+        <select name="status" class="form-control" id="id_status">
             <option value="1" {% if form.status.value == 1 %}selected{% endif %}>Скоро начнется</option>
             <option value="2" {% if form.status.value == 2 %}selected{% endif %}>Идет конкурс</option>
             <option value="3" {% if form.status.value == 3 %}selected{% endif %}>Архив</option>

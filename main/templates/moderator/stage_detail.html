@@ -14,6 +14,7 @@
         {% endfor %}
     </ul>
 
+    {% if user.is_superuser or user in stage.contest.moderators.all %}
     <h3>Критерии для этапа:</h3>
     <table class="table table-striped">
         <thead>
@@ -36,17 +37,20 @@
                         </form>
                     </td>
                 </tr>
+                
             {% endfor %}
         </tbody>
     </table>
-
-    <h3>Добавить новый критерий:</h3>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Добавить</button>
-    </form>
-
+    {% endif %}
+    
+    {% if user.is_superuser or user in stage.contest.moderators.all %}
+        <h3>Добавить новый критерий:</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Добавить</button>
+        </form>
+    {% endif %}
 
 
         <a href="{% url 'submit_work' stage.id %}" class="btn btn-success mt-3">Подать работу</a>

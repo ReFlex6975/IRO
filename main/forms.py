@@ -29,7 +29,7 @@ class ContestForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'status': forms.Select(attrs={'class': 'form-select'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
             'moderators': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
         labels = {
@@ -40,38 +40,32 @@ class ContestForm(forms.ModelForm):
             'status': 'Статус',
             'moderators': 'Модераторы',
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
 
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError("Дата начала не может быть позже даты окончания.")
+        return cleaned_data
 
 class StageForm(forms.ModelForm):
     class Meta:
         model = Stage
         fields = ['contest', 'title', 'start_date', 'end_date', 'experts']
-
-    # Настройка поля 'contest' с использованием HiddenInput
-    contest = forms.ModelChoiceField(
-        queryset=Contest.objects.all(),
-        required=True,
-        label="Конкурс",
-        widget=forms.HiddenInput()  # Скрываем поле для пользователя
-    )
-
-    start_date = forms.DateField(
-        widget=forms.SelectDateWidget(),
-        required=True,
-        label="Дата начала"
-    )
-    end_date = forms.DateField(
-        widget=forms.SelectDateWidget(),
-        required=True,
-        label="Дата окончания"
-    )
-
-    experts = forms.ModelMultipleChoiceField(
-        queryset=CustomUser.objects.filter(role='user'),  # Фильтрация по роли пользователя
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-        label="Эксперты"
-    )
+        widgets = {
+            'contest': forms.HiddenInput(),  # Скрытое поле для конкурса
+            'title': forms.TextInput(attrs={'class': 'form-control'}),  # Поле для названия этапа
+            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Дата начала
+            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Дата окончания
+            'experts': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'title': 'Название этапа',
+            'start_date': 'Дата начала',
+            'end_date': 'Дата окончания',
+            'experts': 'Эксперты',
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -89,8 +83,15 @@ class CriterionForm(forms.ModelForm):
     class Meta:
         model = Criterion
         fields = ['stage', 'name', 'max_points']  # Указываем, какие поля будут в форме
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),  # Поле для названия этапа
+            'max_points': forms.TextInput(attrs={'class': 'form-control'}),  # Поле для названия этапа
+        }
+        labels = {
+            'name': 'Название критерия',
+            'max_points': 'Максимум баллов',
+        }
 
-    # Убедитесь, что поле "stage" не выводится для пользователя
     stage = forms.ModelChoiceField(queryset=Stage.objects.all(), required=True, widget=forms.HiddenInput())
 
 

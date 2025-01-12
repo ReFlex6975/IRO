@@ -5,6 +5,7 @@
 
 {% block content %}
     <h1>Конкурсы</h1>
+    <h3>rRaCLBli</h3>
 {% comment %}
     <div class="d-flex">
         <p>Идет конкурс</p>
@@ -12,14 +13,17 @@
         <p>Архив</p>
     </div>
 {% endcomment %}
-    <form method="get" class="mb-4">
-        <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Поиск по названию" value="{{ request.GET.q }}" style="border-radius: 0">
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-primary" style="height: 100%; border-radius: 0; background-color: #117A90; border: 0;" >Поиск</button>
-            </div>
+<form method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Поиск по названию"
+               value="{{ query }}" style="border-radius: 0;">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary" style="height: 100%; border-radius: 0; background-color: #117A90; border: 0;">
+                Поиск
+            </button>
         </div>
-    </form>
+    </div>
+</form>
 {% comment %}
     <div class="d-flex">
         <p>2023</p>
@@ -35,15 +39,23 @@
     </div>
 {% endcomment %}
 <div class="row">
-    {% for contest in contests %}
+    {% if contests %}
+        {% for contest in contests %}
         <div class="col-md-4 mb-4">
-            <div class="card border-0 h-100 d-flex flex-column" style="border-radius: 0; background-color: #F5F5F5;">
-                <div class="card-body flex-grow-1">
+    <a href="{% url 'contest_detail' contest.id %}" class="text-decoration-none" style="color: inherit;">
+        <div class="card border-0 h-100 d-flex flex-column justify-content-between" style="border-radius: 0; background-color: #F5F5F5;">
+            <!-- Верхняя часть -->
+            <div>
+                <div class="card-body">
                     <h5 class="card-title fw-bold mb-3">“{{ contest.title }}”</h5>
-                    <p class="card-subtitle text-muted mb-3">{{ contest.description }}</p>
+                    <p class="card-subtitle text-muted mb-3">
+                        {{ contest.description|truncatechars:70 }}
+                    </p>
                 </div>
+            </div>
 
-                <!-- Footer карточки -->
+            <!-- Нижняя часть -->
+            <div>
                 <div class="card-footer border-0" style="background-color: #F5F5F5;">
                     <div class="fw-bold text-uppercase d-inline-block py-1 px-2 mb-2" style="font-size: 12px; background-color: #F7AB2B; color: white;">
                         {{ contest.get_status_display }}
@@ -51,22 +63,24 @@
                     <p class="card-text mb-0">Начало: <span class="fw-bold">{{ contest.start_date|date:"F" }}</span></p>
                 </div>
 
-                <!-- Полоска снизу -->
                 <div style="height: 4px; background-color: #117A90;"></div>
 
-
-                    <div class="d-flex justify-content-between mt-auto p-3">
-                        <a href="{% url 'contest_edit' contest.id %}" class="btn btn-primary btn-sm flex-grow-1 me-2" style="border-radius: 20px;">
-                            <i class="bi bi-pencil-square"></i> Редактировать
-                        </a>
-                        <a href="{% url 'contest_detail' contest.id %}" class="btn btn-info btn-sm flex-grow-1" style="border-radius: 20px;">
-                            <i class="bi bi-eye"></i> Показать
-                        </a>
-                    </div>
-
+                {% if user.is_superuser or user in contest.moderators.all %}
+    <div class="d-flex justify-content-between p-3">
+        <a href="{% url 'contest_edit' contest.id %}" class="btn btn-primary btn-sm flex-grow-1 me-2" style="border-radius: 20px;">
+            <i class="bi bi-pencil-square"></i> Редактировать
+        </a>
+    </div>
+{% endif %}
             </div>
         </div>
-    {% endfor %}
+    </a>
+</div>
+        
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Конкурсы не найдены.</p>
+    {% endif %}
 </div>
 
 {% endblock %}
